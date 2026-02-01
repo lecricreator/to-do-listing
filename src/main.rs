@@ -1,6 +1,10 @@
 mod arg;
-mod gestionary_file;
-mod new;
+pub mod gestionary_file;
+mod action{
+    pub mod new;
+    pub mod show;
+    pub mod add;
+}
 
 fn main(){
     let args: Vec<String> = std::env::args().collect();
