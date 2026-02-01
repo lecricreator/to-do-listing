@@ -8,7 +8,7 @@ pub fn add(argc: usize, args: &Vec<String>) -> io::Result<()>{
         println!("Need 3 arguments.\n1: action \n2: task\n3. (optinal) commentary");
         return Ok(())
     }else if argc >= 5 {
-        comentary = format!("{}",args[3]);
+        comentary = format!("{}",args[4]);
     }
     let mut file = match gestionary_file::find_file(args){
         Ok(f) => f,
@@ -27,7 +27,7 @@ pub fn add(argc: usize, args: &Vec<String>) -> io::Result<()>{
     //len_total_task = 21
     let task: String = args[3].clone();
     let len_task: usize = task.len();
-    let total_space: usize = 19 - len_task;
+    let total_space: usize = 20 - len_task;
     let mut space_task: String = String::new();
     for _i in 1..total_space {
         space_task = format!("{} ", space_task);
@@ -35,5 +35,6 @@ pub fn add(argc: usize, args: &Vec<String>) -> io::Result<()>{
     let content_file = format!("{}    | {}{}| {}\n", validate, task, space_task, comentary);
     let _total_name_file: String = format!("{}.todoR", task);
     file.write(content_file.as_bytes()).expect("Cannot write in the file : {total_name_file}.");
+    println!("{}", content_file);
     Ok(())
 }
