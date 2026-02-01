@@ -1,6 +1,7 @@
 use crate::action::new;
 use crate::action::show;
 use crate::action::add;
+use crate::action::help;
 
 pub fn start_program(argc: usize, args: &Vec<String>){
     let action = &args[1];
@@ -10,8 +11,10 @@ pub fn start_program(argc: usize, args: &Vec<String>){
         show::show(argc, args);
     }else if action == "add" {
         let _ = add::add(argc, args);
+    }else if action == "help" {
+        help::help();
     }else {
-        println!("This command doesn't exist in the to-do-rustline.");
+        println!("This command doesn't exist in the to-do-rustline.");        
     }
 
 }

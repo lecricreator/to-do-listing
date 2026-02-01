@@ -4,10 +4,10 @@ use crate::gestionary_file::{self};
 pub fn add(argc: usize, args: &Vec<String>) -> io::Result<()>{
     let mut comentary: String = String::new();
     println!("{:?}", args);
-    if argc <= 4{
+    if argc <= 3{
         println!("Need 3 arguments.\n1: action \n2: task\n3. (optinal) commentary");
         return Ok(())
-    }else if argc >= 5 {
+    }else if argc >= 4 {
         comentary = format!("{}",args[4]);
     }
     let mut file = match gestionary_file::find_file(args){
