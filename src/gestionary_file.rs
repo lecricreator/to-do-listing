@@ -22,7 +22,7 @@ pub fn create_file(name_file: &String){
     .expect("Cannot create the {total_name_file}.");
     println!("Create the file {total_name_file}.\nNow you can add for add goal or show for showing the to-do-rustlist.");
     let _ = writeln!(file, "{}\nDONE |        TASK        | COMMENTARY        ", &name_file).expect("Cannot write in the file {total_name_file}.");
-    _ = writeln!(file,       "------------------------------------------------").expect("Cannot write in the file {total_name_file}.");
+    _ = writeln!(file,         "-----|--------------------|--------------------------------------------------").expect("Cannot write in the file {total_name_file}.");
 }
 
 pub fn find_file(args: &Vec<String>) -> Result<File, Error>{

@@ -1,4 +1,4 @@
-use std::{fmt::format, io::{self, BufRead, BufReader, Write}};
+use std::{fmt::{Error, format}, io::{self, BufRead, BufReader, Write}};
 use crate::gestionary_file::{self};
 
 pub fn remove(argc: usize, args: &Vec<String>) -> io::Result<()>{
@@ -14,11 +14,13 @@ pub fn remove(argc: usize, args: &Vec<String>) -> io::Result<()>{
         }
     };
     let reader = BufReader::new(&file);
+    let mut index = 0;
+    let mut table_line: Vec<String> = vec![];
     for line in reader.lines() {
-        let line: String = line?;
-        //if line != &args[2];
-        println!("{}", line);
+        let line= line?;
+        println!("{} : {}", index, line);
+        table_line.push(line);
+        index += 1;
     }
-
     return Ok(())
 }
