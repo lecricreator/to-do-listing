@@ -1,59 +1,31 @@
-use std::{i32, fs, io::{self, BufRead, BufReader, Write}};
+use std::{fs, io::{Write}};
 use std::fs::{File};
 use crate::gestionary_file::{self};
 
-pub fn remove(argc: usize, args: &Vec<String>) -> io::Result<()>{
+pub fn remove(argc: usize, args: &Vec<String>){
     if argc != 3{
         println!("Need 3 arguments.\n1: action \n2: task\n3. (optinal) commentary");
-        return Ok(())
     }
-    let mut file = match gestionary_file::find_file(args){
+    let file = match gestionary_file::find_file(args){
         Ok(f) => f,
-        Err(e) => {
-            println!("to-do-rustfile not exist.\nTap 'list' for see all the to-do-rustfile.{}", e);
-            return Ok(())
-        }
+        Err(e) => {println!("to-do-rustfile not exist.\nTap 'list' for see all the to-do-rustfile.{}", e); return}
     };
-    let reader = BufReader::new(&file);
-    let mut index = 0;
-    let mut table_line: Vec<String> = vec![];
-    for line in reader.lines() {
-        let mut line= line?;
-        if index > 2 {
-            print!("{} : ", index - 3)
-        }else {
-            print!("    ");
-        }
-        println!("{}", line);
-        line += "\n";
-        table_line.push(line);
-        index += 1;
-    }
-    index -= 4;
-    println!("Choose the index to remove. Ex 1");
-    let mut input = String::new();
-    std::io::stdin()
-        .read_line(&mut input)
-        .expect("Can not read user input");
-    let transf_input_to_int: usize = match input.trim().parse::<usize>() {
-        Ok(i) => i,
-        Err(e) => {
-            eprintln!("Invalid number: {}", e);
-            return Ok(());
-        }
-    };
-    if transf_input_to_int > index {println!("value out of index of the to-do-rustlist."); return Ok(());}
+    let input_index_err:i32;
+    let table_line:Vec<String>;
+    (input_index_err, table_line) = gestionary_file::show_and_select_index(file);
+    if input_index_err == -1 {return;}
+    let input_index:usize = input_index_err.try_into().unwrap();
     let mut file_at_replace:File = File::options()
     .write(true)
     .create(true)
     .open("replace_file")
     .expect("Cannot create the replace_file.");
     for t in 0..table_line.len(){
-        if t != transf_input_to_int + 3 {
+        if t != input_index + 3 {
             file_at_replace.write(table_line[t].as_bytes()).expect("Can not write in file");
         }
     }
     let name_old_file: String = format!("{}.todoR", args[2]);
-    fs::rename("replace_file", name_old_file)?;
-    return Ok(())
+    let _ = fs::rename("replace_file", name_old_file).expect("Cannot rename file. Please contact the dev.");
+    return
 }

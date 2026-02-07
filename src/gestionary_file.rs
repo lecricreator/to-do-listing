@@ -1,6 +1,6 @@
 use std::io::Error;
 use std::fs::{File, OpenOptions};
-use std::io::{Read, Write};
+use std::io::{BufRead, BufReader,Read, Write};
 use std::path::Path;
 
 pub fn read_file(fd: &mut File) -> String{
@@ -37,4 +37,45 @@ pub fn find_file(args: &Vec<String>) -> Result<File, Error>{
             .write(true)
             .open(&total_file_name)
         })
+}
+
+pub fn show_and_select_index(file: File) -> (i32, Vec<String>){
+    let reader = BufReader::new(&file);
+    let mut index = 0;
+    let mut table_line: Vec<String> = vec![];
+    let mut line_string:String;
+    for line in reader.lines() {
+        match line{
+            Ok(l) => line_string = l,
+            Err(_) => return (-1, table_line),
+        };
+        if index > 2 {
+            print!("{} : ", index - 3)
+        }else {
+            print!("    ");
+        }
+        println!("{}", line_string);
+        line_string += "\n";
+        table_line.push(line_string);
+        index += 1;
+    }
+    index -= 4;
+    println!("Choose the index to remove. Ex 1");
+    let mut input = String::new();
+    std::io::stdin()
+        .read_line(&mut input)
+        .expect("Can not read user input");
+    let transf_input_to_int: i32 = match input.trim().parse::<i32>() {
+        Ok(i) => i,
+        Err(e) => {
+            eprintln!("Invalid number: {}", e);
+            return (-1, table_line);
+        }
+    };
+    if transf_input_to_int > index 
+    {
+        println!("value out of index of the to-do-rustlist.");
+        return (-1, table_line);
+    };
+    return (transf_input_to_int, table_line);
 }
