@@ -3,7 +3,7 @@ pub fn help() {
     println!("new        : Create a new to-do-rustlist.
             todorustlist new name_of_todorustlist_file.\n");
     println!("add        : Add a new task to complete and (optionnal) add a commentary for mor details.
-            todorustlist add name_of_todorustlist_file write_task (optionnal)write_comentary");
+            todorustlist add name_of_todorustlist_file write_task (optionnal)write_comentary\n");
     println!("show       : Show the todorustlist for see the progression.
             todorustlist show name_of_todorustlist_file\n");
     println!("remove     : remove a task, after you can choose the task at remove.

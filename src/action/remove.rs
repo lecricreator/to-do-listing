@@ -1,4 +1,4 @@
-use std::{i32, io::{self, BufRead, BufReader, Write}};
+use std::{i32, fs, io::{self, BufRead, BufReader, Write}};
 use std::fs::{File};
 use crate::gestionary_file::{self};
 
@@ -53,5 +53,7 @@ pub fn remove(argc: usize, args: &Vec<String>) -> io::Result<()>{
             file_at_replace.write(table_line[t].as_bytes()).expect("Can not write in file");
         }
     }
+    let name_old_file: String = format!("{}.todoR", args[2]);
+    fs::rename("replace_file", name_old_file)?;
     return Ok(())
 }
