@@ -1,4 +1,5 @@
-use std::{fs, fs::{File, OpenOptions}};
+
+use std::{fs::{self, File, OpenOptions}};
 use std::io::{BufRead, BufReader,Read, Write, Error};
 use std::path::Path;
 
@@ -26,16 +27,21 @@ pub fn create_file(name_file: &String){
 
 pub fn find_file(args: &Vec<String>) -> Result<File, Error>{
     let total_file_name:String = format!("{}.todoR", &args[2]);
-    OpenOptions::new()
-        .read(true)
-        .write(true)
-        .open(&&args[2])
-        .or_else(|_| {
-            OpenOptions::new()
+        match OpenOptions::new() 
             .read(true)
             .write(true)
-            .open(&total_file_name)
-        })
+            .open(&args[2]) {
+                Ok(l) => return Ok(l),
+                Err(e) => e,
+            };
+        match OpenOptions::new() 
+            .read(true)
+            .write(true)
+            .open(total_file_name) 
+            {
+                Ok(l) => return Ok(l),
+                Err(e) => return Err(e),
+            };
 }
 
 pub fn show_and_select_index(file: File, action: String) -> (i32, Vec<String>){
@@ -48,7 +54,9 @@ pub fn show_and_select_index(file: File, action: String) -> (i32, Vec<String>){
             Ok(l) => line_string = l,
             Err(_) => return (-1, table_line),
         };
-        if index > 2 {
+        if index > 2 && index < 10 {
+            print!(" {} : ", index - 3)
+        }else if index >= 10 {
             print!("{} : ", index - 3)
         }else {
             print!("    ");

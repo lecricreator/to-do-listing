@@ -4,6 +4,7 @@ use crate::action::add;
 use crate::action::help;
 use crate::action::remove;
 use crate::action::complete;
+use crate::action::uncomplete;
 
 pub fn start_program(argc: usize, args: &Vec<String>){
     let action = &args[1];
@@ -20,14 +21,13 @@ pub fn start_program(argc: usize, args: &Vec<String>){
     }else if action == "complete" {
         complete::complete(argc, args);
     }else if action == "uncomplete" {
-        //complete::complete(argc, args);
+        uncomplete::uncomplete(argc, args);
     }else if action == "file" {
         //complete::complete(argc, args);
     }else if action == "delete" {
         //complete::complete(argc, args);
-
     }else {
-        println!("This command doesn't exist in the to-do-rustline.");        
+        println!("This command doesn't exist in the to-do-rustline.");
     }
 
 }

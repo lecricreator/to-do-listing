@@ -7,6 +7,7 @@ mod action{
     pub mod help;
     pub mod remove;
     pub mod complete;
+    pub mod uncomplete;
 }
 
 fn main(){
