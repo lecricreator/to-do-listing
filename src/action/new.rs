@@ -1,9 +1,7 @@
 use crate::gestionary_file;
+use crate::errors::{self};
 
 pub fn new_action(argc: usize, args: &Vec<String>) {
-    if argc == 3 {
-        gestionary_file::create_file(&args[2]);
-    }else {
-        println!("Need the name of the to-do-rustline for create the file .todoR.")
-    }
+    if !errors::verified_arg(argc, 3) {return;}
+    gestionary_file::create_file(&args[2]);
 }

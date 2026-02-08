@@ -5,6 +5,7 @@ use crate::action::help;
 use crate::action::remove;
 use crate::action::complete;
 use crate::action::uncomplete;
+use crate::action::delete;
 
 pub fn start_program(argc: usize, args: &Vec<String>){
     let action = &args[1];
@@ -23,7 +24,7 @@ pub fn start_program(argc: usize, args: &Vec<String>){
     }else if action == "uncomplete" {
         uncomplete::uncomplete(argc, args);
     }else if action == "file" {
-        //complete::complete(argc, args);
+        delete::delete(argc, args);
     }else if action == "delete" {
         //complete::complete(argc, args);
     }else {

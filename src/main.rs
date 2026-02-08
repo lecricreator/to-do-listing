@@ -1,5 +1,6 @@
 mod arg;
 pub mod gestionary_file;
+pub mod errors;
 mod action{
     pub mod new;
     pub mod show;
@@ -8,6 +9,7 @@ mod action{
     pub mod remove;
     pub mod complete;
     pub mod uncomplete;
+    pub mod delete;
 }
 
 fn main(){

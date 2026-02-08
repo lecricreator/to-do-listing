@@ -25,12 +25,12 @@ pub fn create_file(name_file: &String){
     _ = writeln!(file,         "-----|--------------------|--------------------------------------------------").expect("Cannot write in the file {total_name_file}.");
 }
 
-pub fn find_file(args: &Vec<String>) -> Result<File, Error>{
-    let total_file_name:String = format!("{}.todoR", &args[2]);
+pub fn find_file(args: &String) -> Result<File, Error>{
+    let total_file_name:String = format!("{}.todoR", &args);
         match OpenOptions::new() 
             .read(true)
             .write(true)
-            .open(&args[2]) {
+            .open(&args) {
                 Ok(l) => return Ok(l),
                 Err(e) => e,
             };

@@ -12,7 +12,7 @@ pub fn help() {
             todorustlist complete name_of_todorustlist_file\n");
     println!("uncomplete : uncomplete a task. After you can choose the task at remove.
             todorustlist uncomplete name_of_todorustlist_file\n");
-    println!("file        : file permit you to see all the todorustlist file you create.
+    println!("list        : list permit you to see all the todorustlist file you create.
             todorustlist file\n");
     println!("delete      : delete permit you to delete a todorustlist.
             todorustlist delete name_of_todorustlist_file\n");

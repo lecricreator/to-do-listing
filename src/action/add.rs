@@ -1,23 +1,19 @@
 use std::{io::{self, BufRead, BufReader, Write}};
 use crate::gestionary_file::{self};
 use colored::Colorize;
+use crate::errors;
 
 
 pub fn add(argc: usize, args: &Vec<String>) -> io::Result<()>{
     let mut comentary: String = String::new();
     println!("{:?}", args);
-    if argc <= 2{
-        println!("Need 3 arguments.\n1: action \n2: task\n3. (optinal) commentary");
-        return Ok(())
-    }else if argc == 5 {
+    if !errors::verified_arg(argc, 4) {return Ok(())};
+    if argc == 5 {
         comentary = format!("{}",args[4]);
     }
-    let mut file = match gestionary_file::find_file(args){
+    let mut file = match gestionary_file::find_file(&args[2]){
         Ok(f) => f,
-        Err(e) => {
-            println!("to-do-rustfile not exist.\nTap 'list' for see all the to-do-rustfile.{}", e);
-            return Ok(())
-        }
+        Err(_e) => {errors::print_error(errors::ErrorName::err_file_not_found, args[2].clone()); return Ok(())}
     };
     let reader = BufReader::new(&file);
     for line in reader.lines() {
