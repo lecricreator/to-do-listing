@@ -1,6 +1,5 @@
-use std::io::Error;
-use std::fs::{File, OpenOptions};
-use std::io::{BufRead, BufReader,Read, Write};
+use std::{fs, fs::{File, OpenOptions}};
+use std::io::{BufRead, BufReader,Read, Write, Error};
 use std::path::Path;
 
 pub fn read_file(fd: &mut File) -> String{
@@ -78,4 +77,13 @@ pub fn show_and_select_index(file: File, action: String) -> (i32, Vec<String>){
         return (-1, table_line);
     };
     return (transf_input_to_int, table_line);
+}
+
+pub fn modify_file(table_line: &Vec<String>, file_at_replace: &File, input_index:usize, args: &Vec<String>, 
+    f: fn(table_line: &Vec<String>, file_at_replace: &File, input_index:usize, t: &usize)) {
+    for t in 0..table_line.len(){
+        f(&table_line, &file_at_replace, input_index, &t);
+    }
+    let name_old_file: String = format!("{}.todoR", args[2]);
+    let _ = fs::rename("replace_file", name_old_file).expect("Cannot rename file. Please contact the dev.");
 }

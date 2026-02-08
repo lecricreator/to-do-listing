@@ -1,5 +1,7 @@
 use std::{io::{self, BufRead, BufReader, Write}};
 use crate::gestionary_file::{self};
+use colored::Colorize;
+
 
 pub fn add(argc: usize, args: &Vec<String>) -> io::Result<()>{
     let mut comentary: String = String::new();
@@ -22,8 +24,7 @@ pub fn add(argc: usize, args: &Vec<String>) -> io::Result<()>{
         let line:String = line?;
         println!("{}", line)
     }
-    let _task_done_emoji = '\u{274F}';
-    let validate = '\u{2705}';
+    let task_done_emoji = '\u{274C}';
     //len_total_task = 21
     let task: String = args[3].clone();
     let len_task: usize = task.len();
@@ -32,7 +33,7 @@ pub fn add(argc: usize, args: &Vec<String>) -> io::Result<()>{
     for _i in 1..total_space {
         space_task = format!("{} ", space_task);
     }
-    let content_file = format!("{}   | {}{}| {}\n", validate, task, space_task, comentary);
+    let content_file = format!("{}   | {}{}| {}\n", task_done_emoji, task.bold().blue(), space_task, comentary.green());
     let _total_name_file: String = format!("{}.todoR", task);
     file.write(content_file.as_bytes()).expect("Cannot write in the file : {total_name_file}.");
     println!("{}", content_file);
