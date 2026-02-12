@@ -4,6 +4,7 @@ use crate::gestionary_file;
 use crate::errors;
 
 pub fn remove(argc: usize, args: &Vec<String>){
+    if !errors::verified_arg(argc, 3) {return};
     gestionary_file::replace_file(argc, args, remove_line, "remove".to_string());}
 
 fn remove_line(table_line: &Vec<String>, mut file_at_replace: &File, input_index:usize, t: &usize) {

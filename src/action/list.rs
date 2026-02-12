@@ -1,12 +1,10 @@
 use std::fs;
 use crate::errors;
 
-use crate::errors::ErrorName;
-
 pub fn list(){
     let entries = match fs::read_dir(".") {
         Ok(l) => l, 
-        Err(e) => {errors::print_error(ErrorName::ErrReadDirectory, e.to_string()); return}};
+        Err(e) => {errors::print_error(errors::ErrorName::ErrReadDirectory, e.to_string()); return}};
     let mut table_str: Vec<String> = Vec::new();
     for entry in entries {
         if let Ok(entry) = entry {
