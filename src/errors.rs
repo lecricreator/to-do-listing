@@ -33,7 +33,7 @@ pub fn print_error (err: ErrorName, err_msg: String) {
 
 pub fn verified_arg(argc: usize, nbr_arg: usize) -> bool {
     let conv_to_str:String = nbr_arg.to_string();
-    if argc < nbr_arg {
+    if argc != nbr_arg {
         if nbr_arg == 2 {
             print_error(ErrorName::ErrNotSuffisalyArg2, conv_to_str);
         } else if nbr_arg == 3 {

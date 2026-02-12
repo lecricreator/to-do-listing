@@ -2,7 +2,7 @@
 use std::{fs::{self, File, OpenOptions}};
 use std::io::{BufRead, BufReader,Read, Write, Error};
 use std::path::Path;
-//use colored::Colorize;
+use colored::Colorize;
 use crate::errors;
 
 pub fn read_file(fd: &mut File) -> String{
@@ -56,9 +56,9 @@ pub fn show_and_select_index(file: File, action: String) -> (i32, Vec<String>){
             Err(_) => return (-1, table_line),
         };
         if index > 2 && index < 10 {
-            print!(" {} : ", index - 3)
+            print!(" {} :", index - 3)
         }else if index >= 10 {
-            print!("{} : ", index - 3)
+            print!("{} :", index - 3)
         }else {
             print!("    ");
         }
@@ -88,17 +88,22 @@ pub fn show_and_select_index(file: File, action: String) -> (i32, Vec<String>){
     return (transf_input_to_int, table_line);
 }
 
-fn add_task(file: File, action: String) -> (i32, Vec<String>){
+fn add_task(file: File, name_file: String) -> (i32, Vec<String>){
     let reader = BufReader::new(&file);
     let mut table_line: Vec<String> = vec![];
+    let mut nbr_complete:u8 = 0;
     let mut line_string:String;
     for line in reader.lines() {
         line_string = match line{
             Ok(l) => l,
             Err(_) => return (-1, table_line),
         };
+        println!("{}", line_string);
+        if line_string.contains("\u{2705}") {nbr_complete += 1;}
+        line_string += "\n";
+        table_line.push(line_string);
     }
-    println!("write the task for add in the to-do-RList. Ex task1");
+    println!("\nwrite the task for add in the to-do-RList. Ex task1");
     let mut input_task = String::new();
     let mut input_commentary: String = String::new();
     std::io::stdin()
@@ -108,12 +113,23 @@ fn add_task(file: File, action: String) -> (i32, Vec<String>){
     std::io::stdin()
         .read_line(&mut input_commentary)
         .expect("Can not read user input");
-    
+    let task_done_emoji = '\u{274C}';
+    let len_input_task: usize = input_task.len();
+    let total_space: usize = 21 - len_input_task;
+    let mut space_input_task: String = String::new();
+    for _i in 1..total_space {
+        space_input_task = format!("{} ", space_input_task);
+    }
+    let content_file = format!("{}   | {}{}| {}\n", task_done_emoji, input_task.trim().bold().blue(), space_input_task, input_commentary.trim().green());
+    table_line.push(content_file);
+    table_line[0] = format!("{}.todoR | progression: {}/{}\n", name_file, nbr_complete, table_line.len() - 3);
+    for l in &table_line {
+        print!("{l}");
+    }
     return (0, table_line);
 }
 
-pub fn replace_file(argc: usize, args: &Vec<String>, modification: fn(&Vec<String>, &File, usize, &usize), action: String) {
-    if !errors::verified_arg(argc, 3) {return}
+pub fn replace_file(args: &Vec<String>, modification: fn(&Vec<String>, &File, usize, &usize), action: String) {
     let file = match find_file(&args[2]){
         Ok(f) => f,
         Err(_e) => {errors::print_error(errors::ErrorName::ErrFileNotFound, args[2].clone()); return}
@@ -126,7 +142,11 @@ pub fn replace_file(argc: usize, args: &Vec<String>, modification: fn(&Vec<Strin
     if input_index_err <= -1 {return;}
         input_index = input_index_err.try_into().unwrap();
     }else if action == "add" {
-
+        (input_index_err, table_line) = add_task(file, args[2].clone());
+        if input_index_err == -1 {
+            errors::print_error(errors::ErrorName::ErrFileNotFound, args[2].clone());
+            return;
+        }
     }
     let file_at_replace:File = File::options()
     .write(true)
@@ -142,5 +162,5 @@ pub fn modify_file(table_line: &Vec<String>, file_at_replace: &File, input_index
         f(&table_line, &file_at_replace, input_index, &t);
     }
     let name_old_file: String = format!("{}.todoR", args[2]);
-    let _ = fs::rename("replace_file", name_old_file).expect("Cannot rename file. Please contact the dev.");
+    fs::rename("replace_file", name_old_file).expect("Cannot rename file. Please contact the dev.");
 }

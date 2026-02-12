@@ -5,7 +5,7 @@ use crate::errors::{self};
 
 pub fn complete(argc: usize, args: &Vec<String>){
     if !errors::verified_arg(argc, 3) {return};
-    gestionary_file::replace_file(argc, args, complete_file, "add".to_string());
+    gestionary_file::replace_file(args, complete_file, "complete task".to_string());
 }
 
 fn complete_file(table_line: &Vec<String>, mut file_at_replace: &File, input_index:usize, t: &usize){

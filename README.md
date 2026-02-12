@@ -18,8 +18,21 @@ fn remove_line(table_line:Vec<String>, file_at_replace:File, input_index:usize, 
     }
 }
 ```
+- What is-it Ok(entry) :
+```RS
+let entries = match fs::read_dir(".") {
+        Ok(l) => l, 
+        Err(e) => {errors::print_error(errors::ErrorName::ErrReadDirectory, e.to_string()); return}};
+for entry in entries {
+    f let Ok(entry) = entry { // here
+        let file_name = entry.file_name();
+    }
+}
+```
+
 
 PROBLEME :
 - When make t.todoR create a file t.todoR.todoR, not verified t.todoR
 - If ther's too many words in the add in task it panik.
 - add a progression list.
+- verified if it already complete or uncomplete for action complete and uncomplete.
