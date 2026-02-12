@@ -17,3 +17,7 @@ fn remove_line(table_line:Vec<String>, file_at_replace:File, input_index:usize, 
         file_at_replace.write(table_line[t].as_bytes()).expect("Can not write in file");
     }
 }
+```
+
+PROBLEME :
+- When make t.todoR create a file t.todoR.todoR, not verified t.todoR
