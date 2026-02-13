@@ -5,7 +5,7 @@ use crate::errors::{self};
 
 pub fn complete(args: &[String]) -> Result<(), errors::MyError> {
     let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
-    manage_file::replace_file(file_name, complete_file, "complete task");
+    manage_file::replace_file(file_name, complete_file, "complete task")?;
     Ok(())
 }
 

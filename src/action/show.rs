@@ -1,5 +1,3 @@
-use std::io::{Error, ErrorKind};
-
 use crate::manage_file::{self, open_file};
 use crate::errors;
 

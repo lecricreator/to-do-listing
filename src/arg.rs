@@ -1,5 +1,3 @@
-use std::io::{Error, ErrorKind};
-
 use crate::action::add;
 use crate::action::complete;
 use crate::action::delete;

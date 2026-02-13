@@ -10,11 +10,11 @@ pub fn delete(args: &[String]) -> Result<(), errors::MyError> {
     };
     let total_name: String = format!("{file_name}.todoR");
     match fs::remove_file(total_name) {
-        Ok(_l) => Ok(()),
-        Err(_e) => Err(()),
+        Ok(_l) => return Ok(()),
+        Err(_e) => {}
     };
     match fs::remove_file(file_name) {
         Ok(_l) => return Ok(()),
-        Err(_e) => Err(errors::MyError::ConnotRemoveFile)
+        Err(_e) => return  Err(errors::MyError::ConnotRemoveFile)
     }
 }
