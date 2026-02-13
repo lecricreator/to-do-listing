@@ -1,11 +1,12 @@
 use std::{io::{Write}};
 use std::fs::{File};
-use crate::gestionary_file::{self};
+use crate::manage_file::{self};
 use crate::errors::{self};
 
-pub fn complete(argc: usize, args: &Vec<String>){
-    if !errors::verified_arg(argc, 3) {return};
-    gestionary_file::replace_file(args, complete_file, "complete task");
+pub fn complete(args: &[String]) -> Result<(), errors::MyError> {
+    let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
+    manage_file::replace_file(file_name, complete_file, "complete task");
+    Ok(())
 }
 
 fn complete_file(table_line: &Vec<String>, mut file_at_replace: &File, input_index:usize, t: &usize){

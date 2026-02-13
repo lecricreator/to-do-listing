@@ -1,4 +1,5 @@
 use colored::Colorize;
+use thiserror::Error;
 
 pub const FILE_NOT_FOUND: &str = ".todoR file '{}' not exist.\nTap 'list' for see all the .todoR file.";
 pub const NO_SUFFISALY_ARGS: &str = "Need {} arguments.\n1: todoR \n2: action\n3. name of file";
@@ -8,7 +9,30 @@ pub enum ErrorName {
         ErrFileNotFound,
         ErrReadDirectory,
         ErrLenTooBig,
+        ErrActionNotExist,
         ErrNotSuffisalyArg(usize),
+}
+
+#[derive(Error, Debug)]
+pub enum MyError {
+    #[error("Not enough argument. Filename needed.")]
+    FileNameNeeded,
+    #[error("Not enough argument. Action needed.")]
+    ActionNeeded,
+    #[error("Canno't read the directory.")]
+    ErrReadDirectory,
+    #[error("Bad input")]
+    ErrBadInput,
+    #[error("Len of the task is too big.")]
+    ErrLenTooBig,
+    #[error("This action does'nt exist. Whrite help for have all action.")]
+    ActionNotExist,
+    #[error("Canno't open the file.")]
+    ConnotOpenFile,
+    #[error("Canno't remove the file.")]
+    ConnotRemoveFile,
+    #[error("I/O error occurred")]
+    IoError(#[from] std::io::Error),
 }
 
 pub fn print_error (err: ErrorName, err_msg: String) {

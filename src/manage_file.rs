@@ -1,7 +1,7 @@
 use crate::errors;
 use colored::Colorize;
 use std::fs::{self, File, OpenOptions};
-use std::io::{BufRead, BufReader, Error, Read, Write};
+use std::io::{BufRead, BufReader, Error, ErrorKind, Read, Write};
 use std::path::Path;
 
 pub fn read_file(fd: &mut File) -> Result<String, std::io::Error> {
@@ -19,22 +19,21 @@ pub fn open_file(file_name: &String) -> Result<File, std::io::Error> {
     }else {
         match File::open(file_name) {
             Ok(f) => Ok(f),
-            Err(e) => Err(e),
+            Err(e) => {println!("{}", "This argument doesn't exist".red()); Err(e)},
         }
     }
 }
 
-pub fn create_file(name_file: &String) {
+pub fn create_file(name_file: &String) -> Result<File, std::io::Error>{
     let total_name_file: String = format!("{name_file}.todoR");
     if Path::new(&total_name_file).exists() {
-        println!("No need to create this files. The {total_name_file} is already exist.");
-        return;
+        println!("{}", "No need to create this files. The {total_name_file} is already exist.".red());
+        return Err(Error::new(ErrorKind::InvalidInput, "Not sufisaly argument, need fileName."))
     }
     let mut file = File::options()
         .write(true)
         .create(true)
-        .open(&total_name_file)
-        .expect("Cannot create the {total_name_file}.");
+        .open(&total_name_file)?;
     println!(
         "Create the file {total_name_file}.\nNow you can add for add goal or show for showing the to-do-rustlist."
     );
@@ -42,16 +41,15 @@ pub fn create_file(name_file: &String) {
         file,
         "{} / progression: 0/0\nDONE |        TASK        | COMMENTARY        ",
         &name_file
-    )
-    .expect("Cannot write in the file {total_name_file}.");
+    )?;
     _ = writeln!(
         file,
         "-----|--------------------|--------------------------------------------------"
-    )
-    .expect("Cannot write in the file {total_name_file}.");
+    )?;
+    Ok(file)
 }
 
-pub fn find_file(args: &String) -> Result<File, Error> {
+pub fn find_file(args: &String) -> Result<File, std::io::Error> {
     let total_file_name: String = format!("{}.todoR", &args);
     match OpenOptions::new().read(true).write(true).open(&args) {
         Ok(l) => return Ok(l),
@@ -110,29 +108,21 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
 }
 
 pub fn replace_file(
-    args: &Vec<String>,
+    file_name: &String,
     modification: fn(&Vec<String>, &File, usize, &usize),
-    action: &str,
-) {
-    let file = match find_file(&args[2]) {
-        Ok(f) => f,
-        Err(_e) => {
-            errors::print_error(errors::ErrorName::ErrFileNotFound, args[2].clone());
-            return;
-        }
-    };
+    action: &str) -> Result<(), errors::MyError>{
+    let file = find_file(file_name)?;
     let (input_index, table_line) = match action {
         "remove" | "complete task" | "uncomplete task" => {
             let Some(res) = show_and_select_index(file, action) else {
-                return;
+                return Err(errors::MyError::ErrBadInput);
             };
-
             res
         },
         "add" => {
             use crate::action::add;
-            let Some(table_line) = add::add_task(file, args[2].clone()) else {
-                return;
+            let Some(table_line) = add::add_task(file, file_name.clone()) else {
+                return Err(errors::MyError::ErrBadInput);
             };
             (0, table_line)
         },
@@ -148,21 +138,22 @@ pub fn replace_file(
         &table_line,
         &file_at_replace,
         input_index,
-        args,
+        file_name,
         modification,
     );
+    Ok(())
 }
 
 pub fn modify_file(
     table_line: &Vec<String>,
     file_at_replace: &File,
     input_index: usize,
-    args: &Vec<String>,
+    args: &String,
     f: fn(table_line: &Vec<String>, file_at_replace: &File, input_index: usize, t: &usize),
 ) {
     for t in 0..table_line.len() {
         f(&table_line, &file_at_replace, input_index, &t);
     }
-    let name_old_file: String = format!("{}.todoR", args[2]);
+    let name_old_file: String = format!("{}.todoR", args);
     fs::rename("replace_file", name_old_file).expect("Cannot rename file. Please contact the dev.");
 }

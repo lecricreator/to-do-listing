@@ -1,16 +1,15 @@
 use crate::errors;
-use crate::gestionary_file::replace_file;
+use crate::manage_file::replace_file;
 use colored::Colorize;
 use std::{
     fs::File,
     io::{BufRead, BufReader, Write},
 };
 
-pub fn add(argc: usize, args: &Vec<String>) {
-    if !errors::verified_arg(argc, 3) {
-        return;
-    };
-    replace_file(args, add_in_file, "add");
+pub fn add(args: &[String]) -> Result<(), errors::MyError> {
+    let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
+    replace_file(file_name, add_in_file, "add")?;
+    Ok(())
 }
 
 fn add_in_file(

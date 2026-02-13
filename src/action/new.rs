@@ -1,12 +1,10 @@
-use std::io::{Error, ErrorKind};
+use crate::errors;
+use crate::manage_file;
 
-use crate::gestionary_file;
-
-pub fn new_action(args: &[String]) -> Result<(), std::io::Error> {
-    println!("LU");
+pub fn new_action(args: &[String]) -> Result<(), errors::MyError> {
     let Some(file_name) = args.first() else {
-        Err(Error::new(ErrorKind::InvalidInput, "Not sufisaly argument, need filename."))?
+        return Err(errors::MyError::FileNameNeeded);
     };
-    gestionary_file::create_file(file_name);
+    manage_file::create_file(file_name)?;
     Ok(())
 }

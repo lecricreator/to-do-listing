@@ -1,11 +1,12 @@
 use std::{io::{Write}};
 use std::fs::{File};
-use crate::gestionary_file;
+use crate::manage_file;
 use crate::errors::{self};
 
-pub fn uncomplete(argc: usize, args: &Vec<String>){
-    if !errors::verified_arg(argc, 3) {return};
-    gestionary_file::replace_file(args, uncomplete_file, "uncomplete task");
+pub fn uncomplete(args: &[String]) -> Result<(), errors::MyError> {
+    let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
+    manage_file::replace_file(file_name, uncomplete_file, "uncomplete task");
+    Ok(())
 }
 
 fn uncomplete_file(table_line: &Vec<String>, mut file_at_replace: &File, input_index:usize, t: &usize){

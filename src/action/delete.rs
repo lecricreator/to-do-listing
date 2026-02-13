@@ -1,20 +1,20 @@
 use std::{fs};
-use crate::gestionary_file::{self};
+use crate::manage_file::{self};
 use crate::errors::{self};
 
-pub fn delete(argc: usize, args: &Vec<String>) {
-    if !errors::verified_arg(argc, 3) {return}
-    match gestionary_file::find_file(&args[2]) {
+pub fn delete(args: &[String]) -> Result<(), errors::MyError> {
+    let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
+    match manage_file::find_file(file_name) {
         Ok(l) => l,
-        Err(_e) => {errors::print_error(errors::ErrorName::ErrFileNotFound, args[2].clone()); return},
+        Err(_e) => {return Err(errors::MyError::ConnotOpenFile)},
     };
-    let total_name: String = format!("{}.todoR", args[2]);
+    let total_name: String = format!("{file_name}.todoR");
     match fs::remove_file(total_name) {
-        Ok(_l) => return,
-        Err(e) => e,
+        Ok(_l) => Ok(()),
+        Err(_e) => Err(()),
     };
-    match fs::remove_file(&args[2]) {
-        Ok(_l) => return,
-        Err(_e) => {errors::print_error(errors::ErrorName::ErrFileNotFound, args[2].clone()); return}
+    match fs::remove_file(file_name) {
+        Ok(_l) => return Ok(()),
+        Err(_e) => Err(errors::MyError::ConnotRemoveFile)
     }
 }
