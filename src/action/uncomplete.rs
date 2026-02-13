@@ -5,7 +5,7 @@ use crate::errors::{self};
 
 pub fn uncomplete(argc: usize, args: &Vec<String>){
     if !errors::verified_arg(argc, 3) {return};
-    gestionary_file::replace_file(args, uncomplete_file, "uncomplete task".to_string());
+    gestionary_file::replace_file(args, uncomplete_file, "uncomplete task");
 }
 
 fn uncomplete_file(table_line: &Vec<String>, mut file_at_replace: &File, input_index:usize, t: &usize){

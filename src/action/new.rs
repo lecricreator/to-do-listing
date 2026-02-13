@@ -1,7 +1,9 @@
 use crate::gestionary_file;
-use crate::errors::{self};
 
-pub fn new_action(argc: usize, args: &Vec<String>) {
-    if !errors::verified_arg(argc, 3) {return;}
-    gestionary_file::create_file(&args[2]);
+pub fn new_action(args: &[String]) {
+    let Some(file_name) = args.first() else {
+        return;
+    };
+
+    gestionary_file::create_file(file_name);
 }
