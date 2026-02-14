@@ -1,5 +1,3 @@
-use std::io::{Error, ErrorKind};
-
 mod action;
 mod arg;
 pub mod errors;

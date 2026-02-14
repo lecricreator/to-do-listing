@@ -56,8 +56,7 @@ pub fn add_task(file: File, name_file: String) -> Option<Vec<String>> {
     );
     let mut input_commentary: String = String::new();
     std::io::stdin()
-        .read_line(&mut input_commentary)
-        .expect("Can not read user input");
+        .read_line(&mut input_commentary).err();
 
     if len_input_task >= 21 {
         input_task = format!("{}.", &input_task[..18]);

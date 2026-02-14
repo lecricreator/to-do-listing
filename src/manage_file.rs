@@ -1,6 +1,7 @@
 use crate::errors;
+
 use colored::Colorize;
-use std::fs::{self, File, OpenOptions};
+use std::fs::{self, File};
 use std::io::{BufRead, BufReader, Read, Write};
 use std::path::Path;
 
@@ -76,8 +77,7 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
     println!("Choose the index for {}. Ex 1", action);
     let mut input = String::new();
     std::io::stdin()
-        .read_line(&mut input)
-        .expect("Can not read user input");
+        .read_line(&mut input).err();
     let transf_input_to_int: usize = match input.trim().parse::<usize>() {
         Ok(i) => i,
         Err(e) => {
@@ -139,6 +139,6 @@ pub fn modify_file(
         f(&table_line, &file_at_replace, input_index, &t)?;
     }
     let name_old_file: String = format!("{}.todoR", args);
-    fs::rename("replace_file", name_old_file).expect("Cannot rename file. Please contact the dev.");
+    fs::rename("replace_file", name_old_file)?;
     Ok(())
 }
