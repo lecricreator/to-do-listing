@@ -132,13 +132,17 @@ pub fn modify_file(
     table_line: &Vec<String>,
     file_at_replace: &File,
     input_index: usize,
-    args: &String,
+    file_name: &String,
     f: fn(table_line: &Vec<String>, file_at_replace: &File, input_index: usize, t: &usize) -> Result<(), errors::MyError>,
 ) -> Result<(), errors::MyError>{
     for t in 0..table_line.len() {
         f(&table_line, &file_at_replace, input_index, &t)?;
     }
-    let name_old_file: String = format!("{}.todoR", args);
-    fs::rename("replace_file", name_old_file)?;
+    let total_file_name: String = format!("{}.todoR", file_name);
+    if Path::new(&total_file_name).exists() {
+        fs::rename("replace_file", total_file_name)?;
+    }else if Path::new(&file_name).exists() {
+        fs::rename("replace_file", file_name)?;
+    }
     Ok(())
 }

@@ -80,6 +80,5 @@ pub fn add_task(file: File, name_file: String) -> Option<Vec<String>> {
         table_line.len() - 3
     );
     table_line.iter().for_each(|l| print!("{l}"));
-
     Some(table_line)
 }
