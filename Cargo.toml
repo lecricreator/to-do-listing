@@ -5,6 +5,7 @@ version = "0.1.0"
 edition = "2024"
 repository = "https://github.com/lecricreator/todotrust"
 license-file = "LICENSE.txt"
+description = "A to-do-list in Rust for learning Rust language."
 
 [dependencies]
 colored = "3"
