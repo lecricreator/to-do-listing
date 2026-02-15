@@ -41,6 +41,8 @@ pub enum MyError {
     AlreadyUncomplete,
     #[error("It cannot parse to another type.")]
     CannotParse,
+    #[error("Input task is empty.")]
+    InputTaskEmpty,
     #[error("value out of index.")]
     ValueOutIndex,
     #[error("I/O error occurred.")]

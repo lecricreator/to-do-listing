@@ -153,7 +153,7 @@ pub fn modify_file(
     input_index: usize,
     file_name: &String,
     f: fn(table_line: &Vec<String>, file_at_replace: &File, input_index: usize, t: &usize) -> Result<(), errors::MyError>,
-) -> Result<(), errors::MyError>{
+) -> Result<(), errors::MyError> {
     for t in 0..table_line.len() {
         f(table_line, &file_at_replace, input_index, &t)?;
     }

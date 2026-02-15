@@ -40,13 +40,18 @@ pub fn add_task(file: File, _name_file: String) -> Option<Vec<String>> {
         .collect::<Vec<String>>();
     println!("\nwrite the task for add in the to-do-RList. Ex task1");
     let mut input_task = String::new();
-    let mut len_input_task = loop {
+    let mut len_input_task = 
+    loop {
         if let Ok(len) = std::io::stdin().read_line(&mut input_task) {
             break len;
         }
         println!("Invalid value, try again");
     };
-    println!(
+    if input_task.trim().is_empty() {
+        println!("Input task is empty.");
+        return None
+    }
+        println!(
         "write the commentary for add in the to-do-RList. It's not obligatory. Ex commentary1"
     );
     let mut input_commentary: String = String::new();
