@@ -12,6 +12,5 @@
 # to-do-listing
 Create my own to-do-list in Rust for learnig Rust.
 
-PROBLEME :
-- Draw result after remove add complete and uncomplet after tap input.
-- verified if it already complete or uncomplete for action complete and uncomplete.
+PROBLEM :
+- Polish center task in table
