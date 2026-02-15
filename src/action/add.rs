@@ -60,17 +60,10 @@ pub fn add_task(file: File, _name_file: String) -> Option<Vec<String>> {
 
     if len_input_task >= 21 {
         input_task = format!("{}.", &input_task[..18]);
-        len_input_task = input_task.len();
-    }
-    let total_space: usize = 20 - len_input_task;
-    let mut space_input_task: String = String::new();
-    for _i in 1..total_space {
-        space_input_task = format!("{} ", space_input_task);
     }
     let content_file = format!(
-        "❌   | {}{}| {}\n",
+        "❌   | {:^19}| {}\n",
         input_task.trim().bold().blue(),
-        space_input_task,
         input_commentary.trim().green()
     );
     table_line.push(content_file);
